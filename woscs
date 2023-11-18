@@ -12,6 +12,11 @@ f.close()
 print("Teams:")
 print("\tMy team: ",data['teams'][0]['name'])
 print("\tTheir team: ",data['teams'][1]['name'])
+print("My lines:")
+for i in (0,1,2):
+    print("\t" + data['teams'][0]['lines'][i]['name'] + " (P: " + str(data['teams'][0]['lines'][i]['power']) + ", T:" + str(data['teams'][0]['lines'][i]['troops']) + ")")
+
+print()
 
 team = list()
 team.append(data['teams'][0])
