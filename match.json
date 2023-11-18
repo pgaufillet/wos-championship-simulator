@@ -1,0 +1,42 @@
+{
+  "teams": [{
+    "name": "Team A",
+    "lines": [
+      {
+        "name": "A1",
+        "power": 6100,
+        "troops": 20
+      },
+      {
+        "name": "A2",
+        "power": 4900,
+        "troops": 20
+      },
+      {
+        "name": "A3",
+        "power": 257,
+        "troops": 3
+      }
+    ]
+  },
+  {
+    "name": "Team B",
+    "lines": [
+      {
+        "name": "B1",
+        "power": 1800,
+        "troops": 14
+      },
+      {
+        "name": "B2",
+        "power": 4200,
+        "troops": 19
+      },
+      {
+        "name": "B3",
+        "power": 4800,
+        "troops": 15
+      }
+    ]
+  }]
+}

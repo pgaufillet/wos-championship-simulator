@@ -1,0 +1,40 @@
+#!/opt/local/bin/python
+
+import json
+import itertools
+from pprint import pprint
+from math import floor
+
+f = open('match.json')
+data = json.load(f)
+f.close()
+
+print("Teams:")
+print("\tMy team: ",data['teams'][0]['name'])
+print("\tTheir team: ",data['teams'][1]['name'])
+
+team = list()
+team.append(data['teams'][0])
+team.append(data['teams'][1])
+
+# Build combo of troops
+troops_combo = list()
+troops_combo.append(list(itertools.permutations(team[0]['lines'])))
+troops_combo.append(list(itertools.permutations(team[1]['lines'])))
+
+#pprint(troops_combo[0])
+#pprint(troops_combo[1])
+
+for combo0 in troops_combo[0]:
+    combo0_win = 0
+#    print("Combo (" + combo0[0]['name'] + "," + combo0[1]['name'] + "," + combo0[2]['name'] + ")")
+    for combo1 in troops_combo[1]:
+#        print("Combo (" + combo1[0]['name'] + "," + combo1[1]['name'] + "," + combo1[2]['name'] + ")")
+        win = 0
+        for i in (0,1,2):
+            if combo0[i]['power'] > combo1[i]['power'] and combo0[i]['troops'] > floor(combo1[i]['troops'] / 2) + 1 :
+                win = win + 1
+        if win >= 2:
+#            print("(" + combo0[0]['name'] + "," + combo0[1]['name'] + "," + combo0[2]['name'] + ") wins over (" + combo1[0]['name'] + "," + combo1[1]['name'] + "," + combo1[2]['name'] + ")")
+            combo0_win = combo0_win + 1
+    print("Combo (" + combo0[0]['name'] + "," + combo0[1]['name'] + "," + combo0[2]['name'] + ") wins", str(combo0_win) + "/6 times.")
