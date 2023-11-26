@@ -5,7 +5,7 @@ import itertools
 from pprint import pprint
 from math import floor
 
-f = open('match.json')
+f = open('match-power.json')
 data = json.load(f)
 f.close()
 

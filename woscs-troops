@@ -1,0 +1,100 @@
+#!/opt/local/bin/python
+
+import json
+import itertools
+from pprint import pprint
+from math import floor, ceil, exp
+
+def complete_line(line):
+    if(len(line['troops']) == 0):
+        return
+    known_power = sum(line['troops'])
+    missing_power = line['power'] - known_power
+    min_missing_troop = line['troops'][-1]
+    missing_troops = line['number'] - len(line['troops'])
+    if(missing_troops == 0):
+        return
+    # Hypothesis: linear increase of power for the missing troops
+    power_step = ceil(2 * (missing_power - missing_troops * min_missing_troop) / (missing_troops * (missing_troops + 1)))
+    for i in range(missing_troops):
+        line['troops'].append(min_missing_troop + (i + 1) * power_step)
+
+def troop_fight(troop1_power, troop2_power):
+    rv = dict()
+    # The highest power wins
+    if troop1_power > troop2_power:
+        # Simple linear reduction of power depending on the relative power of troops
+        rv['troop1_power'] = floor(troop1_power * (0.5 + (troop1_power - troop2_power) / (2 * troop1_power)))
+        rv['troop2_power'] = 0
+        rv['winner'] = 1
+    else:
+        rv['troop2_power'] = floor(troop2_power * (0.5 + (troop2_power - troop1_power) / (2 * troop2_power)))
+        rv['troop1_power'] = 0
+        rv['winner'] = 2
+    return rv
+
+def line_fight(line1, line2):
+    i1 = 0
+    i2 = 0
+    l1 = list(line1)
+    l2 = list(line2)
+    num_fight1 = list()
+    num_fight2 = list()
+    num_fight1.append(0)
+    num_fight2.append(0)
+
+    while i1 < len(l1) and i2 < len(l2):
+        num_fight1[i1] += 1
+        num_fight2[i2] += 1
+        result = troop_fight(l1[i1], l2[i2])
+        print(l1[i1],"against",str(l2[i2]) + ": troop", result['winner'],"wins! (t1:", len(l1) - i1, "troops left; t2:", len(l2) - i2, "troops left)")
+        if result['winner'] == 1:
+            l1[i1] = result['troop1_power']
+            if num_fight1[i1] == 2:
+                i1 += 1
+                num_fight1.append(0)
+            i2 += 1
+            num_fight2.append(0)
+        else:
+            l2[i2] = result['troop2_power']
+            if num_fight2[i2] == 2:
+                i2 += 1
+                num_fight2.append(0)
+            i1 += 1
+            num_fight1.append(0)
+
+    if i1 == len(l1):
+        return 2
+    else:
+        return 1
+
+def fight(team1, team2):
+    pass
+    
+f = open('match-troops.json')
+data = json.load(f)
+f.close()
+
+print("Teams:")
+print("\tMy team: ",data['teams'][0]['name'])
+print("\tTheir team: ",data['teams'][1]['name'])
+print()
+
+team = list()
+team.append(data['teams'][0])
+team.append(data['teams'][1])
+
+# First, complete the missing troops of the opponent with simple Hypothesis
+print('Completing lines')
+for i in range(3):
+    #print('Before:')
+    #pprint(team[1]['lines'][i])
+    complete_line(team[1]['lines'][i])
+    #print('After:')
+    #pprint(team[1]['lines'][i])
+
+# Test fight
+line0 = list()
+for i in range(20):
+    line0.append(team[0]['troops'][i])
+print(team[line_fight(line0, team[1]['lines'][0]['troops'])-1]['name'], "wins")

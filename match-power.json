@@ -1,19 +1,19 @@
 {
   "teams": [{
-    "name": "Team A",
+    "name": "LFR",
     "lines": [
       {
-        "name": "A1",
+        "name": "LFR1",
         "power": 6100,
         "troops": 20
       },
       {
-        "name": "A2",
+        "name": "LFR2",
         "power": 4900,
         "troops": 20
       },
       {
-        "name": "A3",
+        "name": "LFR3",
         "power": 257,
         "troops": 3
       }
